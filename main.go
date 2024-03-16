@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/taako-502/go-mongodb-upsert-vs-upsertmany/upsert"
+	"github.com/taako-502/go-mongodb-upsert-vs-upsertmany/benchmark"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -25,22 +25,20 @@ func main() {
 
 	// upsertのベンチマークの実行
 	upsertCollection := client.Database("benchmark").Collection("upsert")
-	startTime := time.Now()
-	if err := upsert.Upsert(upsertCollection, count); err != nil {
+	duration, err := benchmark.UpsertBenchimark(upsertCollection, count)
+	if err != nil {
 		panic(err)
 	}
-	endTime := time.Now()
-	duration := endTime.Sub(startTime)
 	durationPrint("upsert", duration)
+	benchmark.Cleanup(upsertCollection)
 
 	// upsertManyのベンチマークの実行
 	upsertManyCollection := client.Database("benchmark").Collection("upsertMany")
-	startTime = time.Now()
-	if err := upsert.UpsertMany(upsertManyCollection, count); err != nil {
+	duration, err = benchmark.UpsertManyBenchimark(upsertManyCollection, count)
+	if err != nil {
 		panic(err)
 	}
-	endTime = time.Now()
-	duration = endTime.Sub(startTime)
+	benchmark.Cleanup(upsertManyCollection)
 	durationPrint("upsert many", duration)
 
 	fmt.Println("")
