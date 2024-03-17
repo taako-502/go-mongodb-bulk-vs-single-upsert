@@ -1,4 +1,4 @@
-# Go MongoDB Bulk vs Upsert
+# Go MongoDB Bulk vs Single Upsert
 
 ## Usage
 
