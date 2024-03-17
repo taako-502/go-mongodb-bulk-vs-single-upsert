@@ -10,7 +10,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UpsertManyBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
+// FIXME: メソッド名を変更すること
+func UpsertAndBulkWriteBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
+	if count <= 0 {
+		return 0, fmt.Errorf("count must be greater than 0")
+	}
+
 	ctx := context.TODO()
 
 	var ids []primitive.ObjectID
@@ -35,7 +40,6 @@ func UpsertManyBenchimark(collection *mongo.Collection, count int) (time.Duratio
 	for i, id := range ids {
 		filter := bson.M{"_id": id}
 		if i >= len(ids)/2 {
-			// 新たなドキュメントを挿入するため、IDを新しく生成します。
 			filter = bson.M{"_id": primitive.NewObjectID()}
 		}
 
@@ -51,7 +55,6 @@ func UpsertManyBenchimark(collection *mongo.Collection, count int) (time.Duratio
 
 	// ベンチマーク測定開始
 	startTime := time.Now()
-	// BulkWrite操作を実行します。
 	_, err := collection.BulkWrite(ctx, models)
 	if err != nil {
 		return 0, fmt.Errorf("failed to execute bulk write: %w", err)

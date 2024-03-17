@@ -12,6 +12,10 @@ import (
 )
 
 func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
+	if count <= 0 {
+		return 0, fmt.Errorf("count must be greater than 0")
+	}
+
 	ctx := context.TODO()
 
 	var ids []primitive.ObjectID

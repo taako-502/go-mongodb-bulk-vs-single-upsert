@@ -34,7 +34,7 @@ func main() {
 
 	// upsertManyのベンチマークの実行
 	upsertManyCollection := client.Database("benchmark").Collection("upsertMany")
-	duration, err = benchmark.UpsertManyBenchimark(upsertManyCollection, count)
+	duration, err = benchmark.UpsertAndBulkWriteBenchimark(upsertManyCollection, count)
 	if err != nil {
 		panic(err)
 	}
