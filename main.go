@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/taako-502/go-mongodb-upsert-vs-upsertmany/benchmark"
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

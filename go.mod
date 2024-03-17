@@ -1,4 +1,4 @@
-module github.com/taako-502/go-mongodb-upsert-vs-upsertmany
+module github.com/taako-502/go-mongodb-bulk-vs-single-upsert
 
 go 1.22
 
