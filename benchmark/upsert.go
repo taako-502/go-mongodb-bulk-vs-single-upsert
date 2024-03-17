@@ -17,22 +17,9 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 	}
 
 	ctx := context.TODO()
-
-	var ids []primitive.ObjectID
-	for i := 0; i < count/2; i++ {
-		ids = append(ids, primitive.NewObjectID())
-	}
-
-	// テストデータ作成
-	for _, id := range ids {
-		_, err := collection.InsertOne(ctx, bson.M{
-			"_id":       id,
-			"text":      "initial",
-			"createdAt": primitive.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
-		})
-		if err != nil {
-			return 0, fmt.Errorf("failed to insert initial document: %w", err)
-		}
+	ids, err := seed(ctx, collection, count/2)
+	if err != nil {
+		return 0, fmt.Errorf("failed to seed data: %w", err)
 	}
 
 	// ベンチマーク測定開始
