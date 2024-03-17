@@ -7,13 +7,13 @@ db-stop:
 	docker stop mongodb || true
 	docker rm mongodb || true
 
-run:
+run: db-stop
 	@$(MAKE) db
 	@echo "Running main.go..."
 	@go run main.go || true
 	@$(MAKE) db-stop
 
-benchmark:
+benchmark: db-stop
 	@$(MAKE) db
 	@echo "Running main.go..."
 	@go run command/benchmark/main.go || true

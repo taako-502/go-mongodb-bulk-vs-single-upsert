@@ -11,11 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type pattern struct {
-	numberOfUsers  int
-	numberOfPoints int
-}
-
 func main() {
 	ctx := context.Background()
 
@@ -31,32 +26,36 @@ func main() {
 
 	// 計測パターン
 	patterns := []int{
-		10, 100, 1000, 10000, 100000, 1000000,
+		2, 10, 100, 1000, 10000, 100000, 1000000,
 	}
 
+	printHeader()
 	for _, p := range patterns {
-		fmt.Println("処理回数\t: ", p)
-
 		// upsertのベンチマークの実行
 		upsertCollection := client.Database("benchmark").Collection("upsert")
-		duration, err := benchmark.UpsertBenchimark(upsertCollection, p)
+		upsertDuration, err := benchmark.UpsertBenchimark(upsertCollection, p)
 		if err != nil {
 			panic(err)
 		}
-		durationPrint("upsert", duration)
 		benchmark.Cleanup(upsertCollection)
 
 		// upsertManyのベンチマークの実行
 		upsertManyCollection := client.Database("benchmark").Collection("upsertMany")
-		duration, err = benchmark.UpsertAndBulkWriteBenchimark(upsertManyCollection, p)
+		bulkWriteDuration, err := benchmark.UpsertAndBulkWriteBenchimark(upsertManyCollection, p)
 		if err != nil {
 			panic(err)
 		}
-		durationPrint("upsert many", duration)
+		durationPrint(p, upsertDuration, bulkWriteDuration)
 		benchmark.Cleanup(upsertManyCollection)
 	}
 }
 
-func durationPrint(target string, duration time.Duration) {
-	println(target + "の処理時間\t: " + duration.String())
+func printHeader() {
+	fmt.Println("Count\tUpsert[ms]\tUpsert with BulkWrite[ms]")
+}
+
+func durationPrint(count int, upsertDuration, bulkWriteDuration time.Duration) {
+	upsertDurationMs := float64(upsertDuration) / float64(time.Millisecond)
+	bulkWriteDurationMs := float64(bulkWriteDuration) / float64(time.Millisecond)
+	fmt.Printf("%d\t%.6f\t%.6f\n", count, upsertDurationMs, bulkWriteDurationMs)
 }
