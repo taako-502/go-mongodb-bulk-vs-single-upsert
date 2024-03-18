@@ -8,10 +8,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// FIXME: メソッド名を変更すること
-func UpsertAndBulkWriteBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
+func UpsertAndUnorderdBulkWriteBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
 	if count <= 0 {
 		return 0, fmt.Errorf("count must be greater than 0")
 	}
@@ -42,7 +42,8 @@ func UpsertAndBulkWriteBenchimark(collection *mongo.Collection, count int) (time
 
 	// ベンチマーク測定開始
 	startTime := time.Now()
-	if _, err := collection.BulkWrite(ctx, models); err != nil {
+	opts := options.BulkWrite().SetOrdered(false) // 順序を保証しないことでより高速化させる
+	if _, err := collection.BulkWrite(ctx, models, opts); err != nil {
 		return 0, fmt.Errorf("failed to execute bulk write: %w", err)
 	}
 	endTime := time.Now()

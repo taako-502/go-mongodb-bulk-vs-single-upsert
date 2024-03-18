@@ -39,23 +39,34 @@ func main() {
 		}
 		benchmark.Cleanup(upsertCollection)
 
-		// upsertManyのベンチマークの実行
-		upsertManyCollection := client.Database("benchmark").Collection("upsertMany")
-		bulkWriteDuration, err := benchmark.UpsertAndBulkWriteBenchimark(upsertManyCollection, p)
+		// 順序付けられたBulkのベンチマークの実行
+		upsertManyCollection := client.Database("benchmark").Collection("orderdBulkWrite")
+		bulkWriteDuration, err := benchmark.UpsertAndOrderdBulkWriteBenchimark(upsertManyCollection, p)
 		if err != nil {
 			panic(err)
 		}
-		durationPrint(p, upsertDuration, bulkWriteDuration)
 		benchmark.Cleanup(upsertManyCollection)
+
+		// 順序付けられていないBulkのベンチマークの実行
+		onorderdBulkWriteCollection := client.Database("benchmark").Collection("onorderdBulkWrite")
+		unorderdBulkWriteDuration, err := benchmark.UpsertAndUnorderdBulkWriteBenchimark(onorderdBulkWriteCollection, p)
+		if err != nil {
+			panic(err)
+		}
+		benchmark.Cleanup(upsertManyCollection)
+
+		// 結果の出力
+		durationPrint(p, upsertDuration, bulkWriteDuration, unorderdBulkWriteDuration)
 	}
 }
 
 func printHeader() {
-	fmt.Println("Count\tUpsert[ms]\tUpsert with BulkWrite[ms]")
+	fmt.Println("Count,Upsert[ms],Upsert with Orderd BulkWrite[ms],Upsert with Unorderd BulkWrite[ms]")
 }
 
-func durationPrint(count int, upsertDuration, bulkWriteDuration time.Duration) {
+func durationPrint(count int, upsertDuration, bulkWriteDuration, unorderdBulkWriteDuration time.Duration) {
 	upsertDurationMs := float64(upsertDuration) / float64(time.Millisecond)
 	bulkWriteDurationMs := float64(bulkWriteDuration) / float64(time.Millisecond)
-	fmt.Printf("%d\t%.6f\t%.6f\n", count, upsertDurationMs, bulkWriteDurationMs)
+	unorderdBulkWriteDurationMs := float64(unorderdBulkWriteDuration) / float64(time.Millisecond)
+	fmt.Printf("%d,%.6f,%.6f,%.6f\n", count, upsertDurationMs, bulkWriteDurationMs, unorderdBulkWriteDurationMs)
 }
