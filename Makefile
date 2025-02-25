@@ -1,7 +1,7 @@
 .PHONY: db db-stop run benchmark
 
 db:
-	docker run -d --name mongodb -p 27017:27017 mongo
+	docker run -d --name go_mongodb_bulk_vs_single_upsert -p 27017:27017 mongo
 
 db-stop:
 	docker stop mongodb || true
