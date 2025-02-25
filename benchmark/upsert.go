@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
@@ -28,12 +27,12 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 		upsertData := bson.M{
 			"$set": bson.M{
 				"text":      "upsert",
-				"updatedAt": primitive.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
+				"updatedAt": bson.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
 			},
 		}
 
 		// NOTE: upsertは常にtrueに設定
-		upsert := options.Update().SetUpsert(true)
+		upsert := options.UpdateOne().SetUpsert(true)
 		if i < len(ids)/2 {
 			_, err := collection.UpdateOne(
 				ctx,
@@ -47,7 +46,7 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 		} else {
 			_, err := collection.UpdateOne(
 				ctx,
-				bson.M{"_id": primitive.NewObjectID()}, // 新たなドキュメントをinsert
+				bson.M{"_id": bson.NewObjectID()}, // 新たなドキュメントをinsert
 				upsertData,
 				upsert,
 			)

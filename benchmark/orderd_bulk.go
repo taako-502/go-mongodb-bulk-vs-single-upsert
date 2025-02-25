@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func UpsertAndOrderdBulkWriteBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
@@ -27,13 +26,13 @@ func UpsertAndOrderdBulkWriteBenchimark(collection *mongo.Collection, count int)
 	for i, id := range ids {
 		filter := bson.M{"_id": id}
 		if i >= len(ids)/2 {
-			filter = bson.M{"_id": primitive.NewObjectID()}
+			filter = bson.M{"_id": bson.NewObjectID()}
 		}
 
 		update := bson.M{
 			"$set": bson.M{
 				"text":      "upsert",
-				"updatedAt": primitive.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
+				"updatedAt": bson.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
 			},
 		}
 		model := mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true)

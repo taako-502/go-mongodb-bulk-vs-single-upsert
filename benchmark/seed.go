@@ -5,24 +5,23 @@ import (
 	"fmt"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // seed ベンチマーク測定に利用するデータ作成
-func seed(ctx context.Context, collection *mongo.Collection, numRecords int) ([]primitive.ObjectID, error) {
+func seed(ctx context.Context, collection *mongo.Collection, numRecords int) ([]bson.ObjectID, error) {
 	var models []mongo.WriteModel
-	var ids []primitive.ObjectID
+	var ids []bson.ObjectID
 
 	for range numRecords {
-		id := primitive.NewObjectID()
+		id := bson.NewObjectID()
 		ids = append(ids, id)
 		model := mongo.NewInsertOneModel().SetDocument(bson.M{
 			"_id":       id,
 			"text":      "initial",
-			"createdAt": primitive.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
+			"createdAt": bson.DateTime(time.Now().UnixNano() / int64(time.Millisecond)),
 		})
 		models = append(models, model)
 	}
