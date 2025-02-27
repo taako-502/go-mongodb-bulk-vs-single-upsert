@@ -1,0 +1,30 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/taako-502/go-mongodb-bulk-vs-single-upsert
+cpu: Apple M4
+BenchmarkUpsert/Upsert_2-10       	    4680	    232737 ns/op	   22376 B/op	     233 allocs/op
+BenchmarkUpsert/Upsert_10-10      	    1668	    685338 ns/op	   84585 B/op	     856 allocs/op
+BenchmarkUpsert/Upsert_500-10     	      37	  28625611 ns/op	 3945197 B/op	   38508 allocs/op
+BenchmarkUpsert/Upsert_1000-10    	      19	  58740787 ns/op	 7909009 B/op	   76914 allocs/op
+BenchmarkUpsert/Upsert_5000-10    	       4	 293842208 ns/op	39610966 B/op	  384061 allocs/op
+BenchmarkUpsert/Upsert_10000-10   	       2	 586719792 ns/op	79485428 B/op	  767993 allocs/op
+BenchmarkUpsert/Upsert_50000-10   	       1	2891983041 ns/op	400345168 B/op	 3839276 allocs/op
+BenchmarkUpsert/Upsert_100000-10  	       1	5791926875 ns/op	803009304 B/op	 7726957 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_2-10         	    5260	    226332 ns/op	   23124 B/op	     243 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_10-10        	    3984	    265370 ns/op	   66971 B/op	     616 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_500-10       	     367	   5662196 ns/op	 2876022 B/op	   22134 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_1000-10      	     134	   8641630 ns/op	 5849728 B/op	   44286 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_5000-10      	      36	  32612450 ns/op	30317297 B/op	  220393 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_10000-10     	      18	  62296380 ns/op	61214151 B/op	  440440 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_50000-10     	       4	 316372052 ns/op	311604312 B/op	 2200622 allocs/op
+BenchmarkOrderedBulkWrite/OrderedBulkWrite_100000-10    	       2	 613606521 ns/op	625351652 B/op	 4400786 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_2-10     	    5222	    228584 ns/op	   23351 B/op	     243 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_10-10    	    3969	    280247 ns/op	   67200 B/op	     616 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_500-10   	     358	   6166843 ns/op	 2887283 B/op	   22135 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_1000-10  	     138	   8383006 ns/op	 5853354 B/op	   44287 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_5000-10  	      34	  33514327 ns/op	30317179 B/op	  220395 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_10000-10 	      16	  64037068 ns/op	61215460 B/op	  440445 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_50000-10 	       4	 318690625 ns/op	311605408 B/op	 2200622 allocs/op
+BenchmarkUnorderedBulkWrite/UnorderedBulkWrite_100000-10         	       2	 608154896 ns/op	625350492 B/op	 4400786 allocs/op
+PASS
+ok  	github.com/taako-502/go-mongodb-bulk-vs-single-upsert	39.037s

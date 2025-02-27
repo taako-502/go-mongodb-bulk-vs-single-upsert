@@ -29,8 +29,7 @@ func BenchmarkUpsert(b *testing.B) {
 		b.Run("Upsert_"+fmt.Sprint(n), func(b *testing.B) {
 			b.ResetTimer()
 			for b.Loop() {
-				_, err := benchmark.UpsertBenchimark(collection, n)
-				if err != nil {
+				if _, err := benchmark.UpsertBenchimark(collection, n); err != nil {
 					b.Fatal(err)
 				}
 			}
@@ -46,8 +45,7 @@ func BenchmarkOrderedBulkWrite(b *testing.B) {
 		b.Run("OrderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
 			b.ResetTimer()
 			for b.Loop() {
-				_, err := benchmark.UpsertAndOrderdBulkWriteBenchimark(collection, n)
-				if err != nil {
+				if _, err := benchmark.UpsertAndOrderdBulkWriteBenchimark(collection, n); err != nil {
 					b.Fatal(err)
 				}
 			}
@@ -63,8 +61,7 @@ func BenchmarkUnorderedBulkWrite(b *testing.B) {
 		b.Run("UnorderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
 			b.ResetTimer()
 			for b.Loop() {
-				_, err := benchmark.UpsertAndUnorderdBulkWriteBenchimark(collection, n)
-				if err != nil {
+				if _, err := benchmark.UpsertAndUnorderdBulkWriteBenchimark(collection, n); err != nil {
 					b.Fatal(err)
 				}
 			}
