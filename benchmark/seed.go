@@ -10,8 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-// seed ベンチマーク測定に利用するデータ作成
-func seed(ctx context.Context, collection *mongo.Collection, numRecords int) ([]bson.ObjectID, error) {
+// Seed ベンチマーク測定に利用するデータ作成
+func Seed(ctx context.Context, collection *mongo.Collection, numRecords int) ([]bson.ObjectID, error) {
 	var models []mongo.WriteModel
 	var ids []bson.ObjectID
 

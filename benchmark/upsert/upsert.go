@@ -1,4 +1,4 @@
-package benchmark
+package upsert
 
 import (
 	"context"
@@ -10,19 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, error) {
-	if count <= 0 {
-		return 0, fmt.Errorf("count must be greater than 0")
-	}
-
-	ctx := context.TODO()
-	ids, err := seed(ctx, collection, count/2)
-	if err != nil {
-		return 0, fmt.Errorf("failed to seed data: %w", err)
-	}
-
+func UpsertBenchmark(ctx context.Context, collection *mongo.Collection, ids []bson.ObjectID) error {
 	// ベンチマーク測定開始
-	startTime := time.Now()
 	for i, id := range ids {
 		upsertData := bson.M{
 			"$set": bson.M{
@@ -41,7 +30,7 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 				upsert,
 			)
 			if err != nil {
-				return 0, fmt.Errorf("failed to update document: %w", err)
+				return fmt.Errorf("failed to update document: %w", err)
 			}
 		} else {
 			_, err := collection.UpdateOne(
@@ -51,11 +40,10 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 				upsert,
 			)
 			if err != nil {
-				return 0, fmt.Errorf("failed to insert new document via upsert: %w", err)
+				return fmt.Errorf("failed to insert new document via upsert: %w", err)
 			}
 		}
 	}
-	endTime := time.Now()
 
-	return endTime.Sub(startTime), nil
+	return nil
 }
