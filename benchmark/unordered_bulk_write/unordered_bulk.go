@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-func UpsertAndUnorderedBulkWriteBenchimark(ctx context.Context, collection *mongo.Collection, count int, models []mongo.WriteModel) error {
+func UpsertAndUnorderedBulkWriteBenchmark(ctx context.Context, collection *mongo.Collection, count int, models []mongo.WriteModel) error {
 	// 順序を保証しないことでより高速化させる
 	opts := options.BulkWrite().SetOrdered(false)
 	if _, err := collection.BulkWrite(ctx, models, opts); err != nil {

@@ -10,6 +10,7 @@ import (
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark"
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/ordered_bulk_write"
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/unordered_bulk_write"
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/upsert"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -32,9 +33,13 @@ func BenchmarkUpsert(b *testing.B) {
 
 	for _, n := range benchmarkCounts {
 		b.Run("Upsert_"+fmt.Sprint(n), func(b *testing.B) {
+			ids, err := benchmark.Seed(ctx, collection, n/2)
+			if err != nil {
+				b.Fatal(err)
+			}
 			b.ResetTimer()
 			for b.Loop() {
-				if _, err := benchmark.UpsertBenchimark(collection, n); err != nil {
+				if err := upsert.UpsertBenchmark(ctx, collection, ids); err != nil {
 					b.Fatal(err)
 				}
 			}
@@ -49,13 +54,13 @@ func BenchmarkOrderedBulkWrite(b *testing.B) {
 
 	for _, n := range benchmarkCounts {
 		b.Run("OrderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
-			b.ResetTimer()
 			model, err := ordered_bulk_write.InitOrderedBulkWriteModel(ctx, collection, n)
 			if err != nil {
 				b.Fatal(err)
 			}
+			b.ResetTimer()
 			for b.Loop() {
-				if err := ordered_bulk_write.UpsertAndOrderdBulkWriteBenchimark(ctx, collection, n, model); err != nil {
+				if err := ordered_bulk_write.UpsertAndOrderdBulkWriteBenchmark(ctx, collection, n, model); err != nil {
 					b.Fatal(err)
 				}
 			}
@@ -70,13 +75,13 @@ func BenchmarkUnorderedBulkWrite(b *testing.B) {
 
 	for _, n := range benchmarkCounts {
 		b.Run("UnorderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
-			b.ResetTimer()
 			model, err := unordered_bulk_write.InitUnorderedBulkWriteModel(ctx, collection, n)
 			if err != nil {
 				b.Fatal(err)
 			}
+			b.ResetTimer()
 			for b.Loop() {
-				if err := unordered_bulk_write.UpsertAndUnorderedBulkWriteBenchimark(ctx, collection, n, model); err != nil {
+				if err := unordered_bulk_write.UpsertAndUnorderedBulkWriteBenchmark(ctx, collection, n, model); err != nil {
 					b.Fatal(err)
 				}
 			}
