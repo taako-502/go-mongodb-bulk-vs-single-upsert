@@ -10,7 +10,7 @@ import (
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark"
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/ordered_bulk_write"
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/unordered_bulk_write"
-	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/upsert"
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/upsert_one"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -39,7 +39,7 @@ func BenchmarkUpsert(b *testing.B) {
 			}
 			b.ResetTimer()
 			for b.Loop() {
-				if err := upsert.UpsertBenchmark(ctx, collection, ids); err != nil {
+				if err := upsert_one.UpsertBenchmark(ctx, collection, ids); err != nil {
 					b.Fatal(err)
 				}
 			}
