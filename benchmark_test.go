@@ -8,6 +8,8 @@ import (
 	"fmt"
 
 	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark"
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/ordered_bulk_write"
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark/unordered_bulk_write"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -48,12 +50,12 @@ func BenchmarkOrderedBulkWrite(b *testing.B) {
 	for _, n := range benchmarkCounts {
 		b.Run("OrderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
 			b.ResetTimer()
-			model, err := benchmark.InitOrderedBulkWriteModel(ctx, collection, n)
+			model, err := ordered_bulk_write.InitOrderedBulkWriteModel(ctx, collection, n)
 			if err != nil {
 				b.Fatal(err)
 			}
 			for b.Loop() {
-				if err := benchmark.UpsertAndOrderdBulkWriteBenchimark(ctx, collection, n, model); err != nil {
+				if err := ordered_bulk_write.UpsertAndOrderdBulkWriteBenchimark(ctx, collection, n, model); err != nil {
 					b.Fatal(err)
 				}
 			}
@@ -69,8 +71,12 @@ func BenchmarkUnorderedBulkWrite(b *testing.B) {
 	for _, n := range benchmarkCounts {
 		b.Run("UnorderedBulkWrite_"+fmt.Sprint(n), func(b *testing.B) {
 			b.ResetTimer()
+			model, err := unordered_bulk_write.InitUnorderedBulkWriteModel(ctx, collection, n)
+			if err != nil {
+				b.Fatal(err)
+			}
 			for b.Loop() {
-				if _, err := benchmark.UpsertAndUnorderdBulkWriteBenchimark(collection, n); err != nil {
+				if err := unordered_bulk_write.UpsertAndUnorderedBulkWriteBenchimark(ctx, collection, n, model); err != nil {
 					b.Fatal(err)
 				}
 			}

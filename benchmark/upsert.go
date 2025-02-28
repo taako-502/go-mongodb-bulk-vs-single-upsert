@@ -16,7 +16,7 @@ func UpsertBenchimark(collection *mongo.Collection, count int) (time.Duration, e
 	}
 
 	ctx := context.TODO()
-	ids, err := seed(ctx, collection, count/2)
+	ids, err := Seed(ctx, collection, count/2)
 	if err != nil {
 		return 0, fmt.Errorf("failed to seed data: %w", err)
 	}

@@ -1,4 +1,4 @@
-package benchmark
+package ordered_bulk_write
 
 import (
 	"context"

@@ -1,20 +1,22 @@
-package benchmark
+package unordered_bulk_write
 
 import (
 	"context"
 	"fmt"
 	"time"
 
+	"github.com/taako-502/go-mongodb-bulk-vs-single-upsert/benchmark"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func InitOrderedBulkWriteModel(ctx context.Context, collection *mongo.Collection, count int) ([]mongo.WriteModel, error) {
-	ids, err := seed(ctx, collection, count/2)
+func InitUnorderedBulkWriteModel(ctx context.Context, collection *mongo.Collection, count int) ([]mongo.WriteModel, error) {
+	ids, err := benchmark.Seed(ctx, collection, count/2)
 	if err != nil {
 		return nil, fmt.Errorf("failed to seed data: %w", err)
 	}
 
+	// データの作成
 	var models []mongo.WriteModel
 	for i, id := range ids {
 		filter := bson.M{"_id": id}
